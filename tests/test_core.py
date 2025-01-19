@@ -1,9 +1,11 @@
 import os
 import tempfile
-from pathlib import Path
 
-import pytest
-from context_generator.core import build_file_tree, collect_file_contents, generate_context
+from context_generator.core import (
+    build_file_tree,
+    collect_file_contents,
+    generate_context,
+)
 
 
 def test_build_file_tree():
@@ -17,7 +19,9 @@ def test_build_file_tree():
             f.write("Hidden file content")
         with open(os.path.join(tmpdir, "dir1", "file2.txt"), "w") as f:
             f.write("Content of file2")
-        with open(os.path.join(tmpdir, "dir1", "subdir1", "file3.txt"), "w") as f:
+        with open(
+            os.path.join(tmpdir, "dir1", "subdir1", "file3.txt"), "w"
+        ) as f:
             f.write("Content of file3")
 
         # Generate file tree
@@ -27,13 +31,6 @@ def test_build_file_tree():
             exclude_paths=["dir1/subdir1"],
             exclude_hidden=True,
         )
-
-        # Expected file tree
-        expected = [
-            "├── dir1/",
-            "│   └── file2.txt",
-            "└── LICENSE",  # Assuming LICENSE is present; adjust accordingly
-        ]
 
         # Since LICENSE may not exist, adjust the assertion
         # Check that excluded files and paths are not present
@@ -59,12 +56,6 @@ def test_collect_file_contents():
             exclude_paths=["dir1"],
             exclude_hidden=True,
         )
-
-        # Expected contents
-        expected = [
-            "\n--- Start of __init__.py ---\n",
-            "\n--- Start of __init__.py ---\n",
-        ]
 
         assert "file1.txt" not in "".join(contents)
         assert "dir1" not in "".join(contents)

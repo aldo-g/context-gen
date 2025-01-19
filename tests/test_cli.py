@@ -1,7 +1,6 @@
 # tests/test_cli.py
 
 import sys
-import os
 import tempfile
 from pathlib import Path
 from unittest import mock
@@ -106,7 +105,7 @@ def test_main_generate_context(capsys):
             ) as mock_generate:
                 test_args = [
                     "generate-context",
-                    "generate",          # Added 'generate' subcommand
+                    "generate",  # Added 'generate' subcommand
                     "some_directory",
                     "--output",
                     "output.txt",
@@ -130,7 +129,10 @@ def test_main_generate_context(capsys):
                 assert "Exclude Paths: ['.git']" in captured.out
                 assert "Exclude Hidden: True" in captured.out
                 assert "Output File: output.txt" in captured.out
-                assert "Calling generate_context with exclude_hidden=True" in captured.out
+                assert (
+                    "Calling generate_context with exclude_hidden=True"
+                    in captured.out
+                )
 
 
 def test_main_calibrate(capsys):
@@ -139,6 +141,8 @@ def test_main_calibrate(capsys):
         with mock.patch("context_generator.cli.CONFIG_PATH", config_path):
             test_args = ["generate-context", "calibrate"]
             with mock.patch("sys.argv", test_args):
-                with mock.patch("context_generator.cli.calibrate") as mock_calibrate:
+                with mock.patch(
+                    "context_generator.cli.calibrate"
+                ) as mock_calibrate:
                     main()
                     mock_calibrate.assert_called_once()
