@@ -1,5 +1,3 @@
-# context_generator/cli.py
-
 import argparse
 import os
 import json
@@ -11,10 +9,8 @@ from context_generator.core import (
     generate_context,
 )
 
-# Default configuration file path
 CONFIG_PATH: Path = Path.home() / ".generate_context_config.json"
 
-# Default configuration
 DEFAULT_CONFIG: dict[str, Any] = {
     "exclude_files": [
         ".env",

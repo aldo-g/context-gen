@@ -20,8 +20,6 @@ setup(
         ],
     },
     install_requires=[
-        # List your package dependencies here, e.g.,
-        # "requests>=2.25.1",
     ],
     python_requires=">=3.7",
     classifiers=[

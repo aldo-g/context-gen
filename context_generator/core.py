@@ -1,5 +1,3 @@
-# context_generator/core.py
-
 import os
 from pathlib import Path
 from typing import List
@@ -46,11 +44,9 @@ def build_file_tree(
         for index, item in enumerate(items):
             item_path: str = os.path.join(dir_path, item)
 
-            # Exclude hidden files and directories if exclude_hidden is True
             if exclude_hidden and item.startswith("."):
                 continue
 
-            # Exclude specific files or paths
             if item in exclude_files or any(
                 exclude in item_path for exclude in exclude_paths
             ):
@@ -107,7 +103,6 @@ def collect_file_contents(
 
     content_lines: List[str] = []
     for root, _, files in os.walk(directory):
-        # Skip directories based on exclude_paths and exclude_hidden
         if any(exclude in root for exclude in exclude_paths):
             continue
         if exclude_hidden and any(
@@ -118,19 +113,15 @@ def collect_file_contents(
         for file in sorted(files):
             file_path: str = os.path.join(root, file)
 
-            # Skip hidden files
             if exclude_hidden and file.startswith("."):
                 continue
 
-            # Skip excluded files
             if file in exclude_files:
                 continue
 
-            # Compute relative path
             relative_path: str = os.path.relpath(file_path, directory)
             relative_path = relative_path.replace(os.sep, "/")
 
-            # Skip content for `__init__.py` but mark its presence
             if file == "__init__.py":
                 content_lines.append(f"\n--- Start of {relative_path} ---\n")
                 continue
