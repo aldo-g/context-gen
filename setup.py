@@ -20,6 +20,10 @@ setup(
         ],
     },
     install_requires=[
+        "pytest>=6.0.0",
+        "pytest-cov>=4.0.0",
+        "flake8>=3.9.2",
+        "black>=23.3.0",
     ],
     python_requires=">=3.7",
     classifiers=[
