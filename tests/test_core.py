@@ -9,8 +9,13 @@ from context_generator.core import (
 
 
 def test_build_file_tree():
+    """
+    Test the build_file_tree function.
+
+    This test verifies that build_file_tree correctly constructs the file tree,
+    excluding specified files, paths, and hidden files.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
-        # Setup sample directory structure
         os.makedirs(os.path.join(tmpdir, "dir1", "subdir1"))
         os.makedirs(os.path.join(tmpdir, ".hidden_dir"))
         with open(os.path.join(tmpdir, "file1.txt"), "w") as f:
@@ -24,7 +29,6 @@ def test_build_file_tree():
         ) as f:
             f.write("Content of file3")
 
-        # Generate file tree
         file_tree = build_file_tree(
             directory=tmpdir,
             exclude_files=["file1.txt"],
@@ -32,8 +36,6 @@ def test_build_file_tree():
             exclude_hidden=True,
         )
 
-        # Since LICENSE may not exist, adjust the assertion
-        # Check that excluded files and paths are not present
         assert "file1.txt" not in file_tree
         assert "subdir1" not in file_tree
         assert ".hidden_dir" not in file_tree
@@ -41,15 +43,19 @@ def test_build_file_tree():
 
 
 def test_collect_file_contents():
+    """
+    Test the collect_file_contents function.
+
+    This test ensures that collect_file_contents correctly gathers
+    file contents, excluding specified files, paths, and hidden files.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
-        # Setup sample directory structure
         os.makedirs(os.path.join(tmpdir, "dir1"))
         with open(os.path.join(tmpdir, "file1.txt"), "w") as f:
             f.write("Content of file1")
         with open(os.path.join(tmpdir, "__init__.py"), "w") as f:
             f.write("# Init file")
 
-        # Collect file contents
         contents = collect_file_contents(
             directory=tmpdir,
             exclude_files=["file1.txt"],
@@ -63,8 +69,14 @@ def test_collect_file_contents():
 
 
 def test_generate_context():
+    """
+    Test the generate_context function.
+
+    This test verifies that generate_context correctly generates the file tree
+    and collects file contents, writing them to the specified output
+    file while respecting exclusions.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
-        # Setup sample directory structure
         os.makedirs(os.path.join(tmpdir, "dir1"))
         with open(os.path.join(tmpdir, "file1.txt"), "w") as f:
             f.write("Content of file1")
@@ -73,7 +85,6 @@ def test_generate_context():
 
         output_file = os.path.join(tmpdir, "output.txt")
 
-        # Generate context
         generate_context(
             directory=tmpdir,
             output_file=output_file,
@@ -82,13 +93,12 @@ def test_generate_context():
             exclude_hidden=True,
         )
 
-        # Read output and verify
         with open(output_file, "r") as f:
             content = f.read()
 
         assert "file1.txt" not in content
         assert "dir1" not in content
         assert "file2.txt" not in content
-        assert "output.txt" not in content  # Output file is excluded
+        assert "output.txt" not in content
         assert "File Tree:" in content
         assert "Files:" in content

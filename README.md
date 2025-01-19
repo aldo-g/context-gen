@@ -3,10 +3,10 @@
 ![PyPI](https://img.shields.io/pypi/v/context-generator)
 ![Python Versions](https://img.shields.io/pypi/pyversions/context-generator)
 ![License](https://img.shields.io/pypi/l/context-generator)
-![GitHub Issues](https://img.shields.io/github/issues/yourusername/context-generator)
-![GitHub Forks](https://img.shields.io/github/forks/yourusername/context-generator)
-![GitHub Stars](https://img.shields.io/github/stars/yourusername/context-generator)
-![GitHub License](https://img.shields.io/github/license/yourusername/context-generator)
+![GitHub Issues](https://img.shields.io/github/issues/aldo-g/context-generator)
+![GitHub Forks](https://img.shields.io/github/forks/aldo-g/context-generator)
+![GitHub Stars](https://img.shields.io/github/stars/aldo-g/context-generator)
+![GitHub License](https://img.shields.io/github/license/aldo-g/context-generator)
 
 ## Table of Contents
 

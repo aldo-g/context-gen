@@ -1,5 +1,3 @@
-# tests/test_cli.py
-
 import sys
 import tempfile
 from pathlib import Path
@@ -13,11 +11,17 @@ from context_generator.cli import calibrate, load_config, save_config, main
 @mock.patch("context_generator.cli.os.startfile")
 @mock.patch("context_generator.cli.subprocess.run")
 def test_calibrate_windows(mock_subprocess_run, mock_startfile):
+    """
+    Test the calibrate function on Windows systems.
+
+    This test ensures that the calibrate function calls 'os.startfile' with the
+    correct configuration file path and does not call 'subprocess.run'.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
         config_path = Path(tmpdir) / ".generate_context_config.json"
         with mock.patch("context_generator.cli.CONFIG_PATH", config_path):
             with open(config_path, "w") as f:
-                f.write("{}")  # Existing config
+                f.write("{}")
 
             calibrate()
             mock_startfile.assert_called_once_with(str(config_path))
@@ -27,12 +31,18 @@ def test_calibrate_windows(mock_subprocess_run, mock_startfile):
 @mock.patch("context_generator.cli.subprocess.run")
 @mock.patch("context_generator.cli.os.uname")
 def test_calibrate_posix_mac(mock_uname, mock_subprocess_run):
+    """
+    Test the calibrate function on macOS systems.
+
+    This test verifies that the calibrate function correctly calls 'open'
+    with the configuration file path on macOS systems.
+    """
     mock_uname.return_value = mock.Mock(sysname="Darwin")
     with tempfile.TemporaryDirectory() as tmpdir:
         config_path = Path(tmpdir) / ".generate_context_config.json"
         with mock.patch("context_generator.cli.CONFIG_PATH", config_path):
             with open(config_path, "w") as f:
-                f.write("{}")  # Existing config
+                f.write("{}")
 
             calibrate()
             mock_subprocess_run.assert_called_once_with(
@@ -43,12 +53,18 @@ def test_calibrate_posix_mac(mock_uname, mock_subprocess_run):
 @mock.patch("context_generator.cli.subprocess.run")
 @mock.patch("context_generator.cli.os.uname")
 def test_calibrate_posix_linux(mock_uname, mock_subprocess_run):
+    """
+    Test the calibrate function on Linux systems.
+
+    This test ensures that the calibrate function calls 'xdg-open' with the
+    correct configuration file path on Linux systems.
+    """
     mock_uname.return_value = mock.Mock(sysname="Linux")
     with tempfile.TemporaryDirectory() as tmpdir:
         config_path = Path(tmpdir) / ".generate_context_config.json"
         with mock.patch("context_generator.cli.CONFIG_PATH", config_path):
             with open(config_path, "w") as f:
-                f.write("{}")  # Existing config
+                f.write("{}")
 
             calibrate()
             mock_subprocess_run.assert_called_once_with(
@@ -57,6 +73,14 @@ def test_calibrate_posix_linux(mock_uname, mock_subprocess_run):
 
 
 def test_load_config_creates_default_if_not_exists():
+    """
+    Test that load_config creates a default configuration file if it
+    does not exist.
+
+    This test verifies that load_config returns the DEFAULT_CONFIG
+    when the configuration file is absent and that the file is
+    created on disk.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
         config_path = Path(tmpdir) / ".generate_context_config.json"
         with mock.patch("context_generator.cli.CONFIG_PATH", config_path):
@@ -71,6 +95,12 @@ def test_load_config_creates_default_if_not_exists():
 
 
 def test_save_config():
+    """
+    Test that save_config correctly saves the provided configuration to a file.
+
+    This test ensures that the configuration saved by save_config matches the
+    input dictionary and can be loaded accurately.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
         config_path = Path(tmpdir) / ".generate_context_config.json"
         new_config = {
@@ -86,10 +116,16 @@ def test_save_config():
 
 
 def test_main_generate_context(capsys):
+    """
+    Test the main function's generate command.
+
+    This test verifies that the generate command correctly processes
+    CLI arguments,merges them with the configuration, and calls
+    generate_context with the resolved settings.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
         config_path = Path(tmpdir) / ".generate_context_config.json"
         with mock.patch("context_generator.cli.CONFIG_PATH", config_path):
-            # Setup configuration
             config = {
                 "exclude_files": [".env"],
                 "exclude_paths": [".git"],
@@ -98,14 +134,13 @@ def test_main_generate_context(capsys):
             }
             save_config(config)
 
-            # Mock generate_context in the cli namespace
             with mock.patch(
                 "context_generator.cli.generate_context",
                 return_value="file_context.txt",
             ) as mock_generate:
                 test_args = [
                     "generate-context",
-                    "generate",  # Added 'generate' subcommand
+                    "generate",
                     "some_directory",
                     "--output",
                     "output.txt",
@@ -136,6 +171,12 @@ def test_main_generate_context(capsys):
 
 
 def test_main_calibrate(capsys):
+    """
+    Test the main function's calibrate command.
+
+    This test ensures that the calibrate command invokes the calibrate
+    function correctly.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
         config_path = Path(tmpdir) / ".generate_context_config.json"
         with mock.patch("context_generator.cli.CONFIG_PATH", config_path):
