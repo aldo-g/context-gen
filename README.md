@@ -47,3 +47,95 @@
 
 ```bash
 pip install context-generator
+```
+
+## Usage
+
+### Generating Context
+
+To generate a file tree and collect contents:
+
+```bash
+generate-context generate <directory> --output <output_file>
+```
+
+**Options:**
+- `directory`: The root directory to scan. Defaults to the current working directory.
+- `--output`: Specify the output file for the generated context.
+- `--exclude-files`: List filenames to exclude from the context.
+- `--exclude-paths`: List directory paths to exclude from the context.
+- `--include-hidden`: Include hidden files and directories in the output.
+
+### Example
+
+Generate a context file for your project:
+
+```bash
+generate-context generate . --output context.txt --exclude-files .env --exclude-paths .git
+```
+
+### Calibrating Configuration
+
+To edit the default configuration file:
+
+```bash
+generate-context calibrate
+```
+
+This opens the configuration file located at `~/.generate_context_config.json` in your default editor. Adjust the settings as needed.
+
+## Configuration
+
+The configuration file is stored at `~/.generate_context_config.json`. Below is an example configuration:
+
+```json
+{
+  "exclude_files": [".env", "package-lock.json", "LICENSE"],
+  "exclude_paths": [".git", "__pycache__"],
+  "output_file": "file_context.txt",
+  "exclude_hidden": true
+}
+```
+
+**Fields:**
+- `exclude_files`: Files to exclude from the context generation.
+- `exclude_paths`: Directories to exclude.
+- `output_file`: Default output file name.
+- `exclude_hidden`: Whether to exclude hidden files and directories.
+
+## Examples
+
+1. **Basic File Tree Generation:**
+
+   ```bash
+   generate-context generate .
+   ```
+
+2. **Excluding Specific Files and Directories:**
+
+   ```bash
+   generate-context generate ./src --exclude-files .env --exclude-paths .git
+   ```
+
+3. **Including Hidden Files:**
+
+   ```bash
+   generate-context generate ./ --include-hidden
+   ```
+
+## Integration with VSCode
+
+- Planned integration with Visual Studio Code to provide an extension for generating context directly from the editor.
+
+## Contributing
+
+We welcome contributions! Feel free to submit issues and pull requests on [GitHub](https://github.com/aldo-g/context-generator).
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For questions or support, reach out to **Alastair Grant** at [aldo.e.george@gmail.com](mailto:aldo.e.george@gmail.com).
+
