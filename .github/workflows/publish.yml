@@ -3,7 +3,7 @@ name: Publish to PyPI
 on:
   push:
     tags:
-      - 'v*'  # Publish only when a tag starting with 'v' is pushed
+      - 'v*'
 
 jobs:
   publish:
