@@ -25,7 +25,9 @@
 
 ## Introduction
 
-**Context Generator** is a Python CLI tool designed to generate a comprehensive file tree and collect file contents from your project. This tool is particularly useful for providing context to Large Language Models (LLMs) for coding assistance, documentation generation, or project analysis.
+**Context Generator** is a Python CLI tool designed to generate a comprehensive file tree and collect file contents from your project. This tool is used to give a comprehensive context of your project to an LLM for improved responses.
+
+for an example of the output please look in the img dir
 
 ## Features
 
