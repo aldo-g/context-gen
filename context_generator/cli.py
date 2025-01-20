@@ -17,7 +17,11 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "package-lock.json",
         "LICENSE",
     ],
-    "exclude_paths": [".git", "__pycache__", "build"],  # Removed the empty string
+    "exclude_paths": [
+        ".git",
+        "__pycache__",
+        "build",
+    ],  # Removed the empty string
     "output_file": "file_context.txt",
     "exclude_hidden": True,  # New flag
 }
@@ -194,4 +198,3 @@ def main() -> None:
             exclude_paths=exclude_paths,
             exclude_hidden=exclude_hidden,
         )
-        
