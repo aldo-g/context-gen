@@ -1,6 +1,18 @@
 import os
 from pathlib import Path
 from typing import List
+import ctypes
+
+
+def is_hidden(filepath: str) -> bool:
+    """Check if a file is hidden on Windows."""
+    try:
+        attrs = ctypes.windll.kernel32.GetFileAttributesW(str(filepath))
+        if attrs == -1:
+            return False
+        return bool(attrs & 2)
+    except Exception:
+        return False
 
 
 def build_file_tree(
@@ -44,8 +56,13 @@ def build_file_tree(
         for index, item in enumerate(items):
             item_path: str = os.path.join(dir_path, item)
 
-            if exclude_hidden and item.startswith("."):
-                continue
+            if exclude_hidden:
+                if os.name == "nt":
+                    if is_hidden(item_path):
+                        continue
+                else:
+                    if item.startswith("."):
+                        continue
 
             if item in exclude_files or any(
                 exclude in item_path for exclude in exclude_paths
@@ -105,16 +122,25 @@ def collect_file_contents(
     for root, _, files in os.walk(directory):
         if any(exclude in root for exclude in exclude_paths):
             continue
-        if exclude_hidden and any(
-            part.startswith(".") for part in Path(root).parts
-        ):
-            continue
+
+        if exclude_hidden:
+            if os.name == "nt":
+                if is_hidden(root):
+                    continue
+            else:
+                if any(part.startswith(".") for part in Path(root).parts):
+                    continue
 
         for file in sorted(files):
             file_path: str = os.path.join(root, file)
 
-            if exclude_hidden and file.startswith("."):
-                continue
+            if exclude_hidden:
+                if os.name == "nt":
+                    if is_hidden(file_path):
+                        continue
+                else:
+                    if file.startswith("."):
+                        continue
 
             if file in exclude_files:
                 continue
@@ -170,7 +196,6 @@ def generate_context(
     if exclude_paths is None:
         exclude_paths = []
 
-    # Always exclude the output file dynamically
     if output_file not in exclude_files:
         exclude_files.append(output_file)
 
@@ -180,6 +205,7 @@ def generate_context(
         exclude_paths,
         exclude_hidden,
     )
+
     file_contents: List[str] = collect_file_contents(
         directory,
         exclude_files,
@@ -197,6 +223,7 @@ def generate_context(
             f.write("\n".join(file_tree))
             f.write("\n\nFiles:\n")
             f.writelines(file_contents)
+        print(f"Context successfully written to {output_file}")
     except Exception as e:
         print(f"Failed to write to output file '{output_file}': {e}")
         raise e
