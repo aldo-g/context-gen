@@ -3,33 +3,34 @@ name: Publish to PyPI
 on:
   push:
     tags:
-      - "v*"
-
-permissions:
-  id-token: write
-  contents: read
+      - 'v*'  # Publish only when a tag starting with 'v' is pushed
 
 jobs:
   publish:
+    permissions:
+      contents: read
+      id-token: write
+
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out the code
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: '3.9'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install build
 
-      - name: Build the package
+      - name: Build package
         run: python -m build
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          password: ${{ secrets.PYPI_PASSWORD }}
+          password: ${{ secrets.PYPI_API_TOKEN }}
