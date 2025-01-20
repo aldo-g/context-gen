@@ -87,7 +87,7 @@ def test_load_config_creates_default_if_not_exists():
             config = load_config()
             assert config == {
                 "exclude_files": [".env", "package-lock.json", "LICENSE"],
-                "exclude_paths": [".git", "__pycache__", "build", ""],
+                "exclude_paths": [".git", "__pycache__", "build"],
                 "output_file": "file_context.txt",
                 "exclude_hidden": True,
             }
