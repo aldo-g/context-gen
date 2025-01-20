@@ -20,6 +20,8 @@ DEFAULT_CONFIG: dict[str, Any] = {
     "exclude_paths": [
         ".git",
         "__pycache__",
+        "build",
+        ""
     ],
     "output_file": "file_context.txt",
     "exclude_hidden": True,  # New flag
