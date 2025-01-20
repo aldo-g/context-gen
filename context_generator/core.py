@@ -10,7 +10,7 @@ def is_hidden(filepath: str) -> bool:
         attrs = ctypes.windll.kernel32.GetFileAttributesW(str(filepath))
         if attrs == -1:
             return False
-        return bool(attrs & 2)  # FILE_ATTRIBUTE_HIDDEN = 0x2
+        return bool(attrs & 2)
     except Exception:
         return False
 
@@ -56,7 +56,6 @@ def build_file_tree(
         for index, item in enumerate(items):
             item_path: str = os.path.join(dir_path, item)
 
-            # Updated hidden file check
             if exclude_hidden:
                 if os.name == "nt":
                     if is_hidden(item_path):
@@ -124,7 +123,6 @@ def collect_file_contents(
         if any(exclude in root for exclude in exclude_paths):
             continue
 
-        # Updated hidden directory check
         if exclude_hidden:
             if os.name == "nt":
                 if is_hidden(root):
@@ -136,7 +134,6 @@ def collect_file_contents(
         for file in sorted(files):
             file_path: str = os.path.join(root, file)
 
-            # Updated hidden file check
             if exclude_hidden:
                 if os.name == "nt":
                     if is_hidden(file_path):
@@ -199,11 +196,9 @@ def generate_context(
     if exclude_paths is None:
         exclude_paths = []
 
-    # Always exclude the output file dynamically
     if output_file not in exclude_files:
         exclude_files.append(output_file)
 
-    print(f"Generating File Tree for directory: {directory}")
     file_tree: List[str] = build_file_tree(
         directory,
         exclude_files,
@@ -211,7 +206,6 @@ def generate_context(
         exclude_hidden,
     )
 
-    print(f"Collecting File Contents for directory: {directory}")
     file_contents: List[str] = collect_file_contents(
         directory,
         exclude_files,
